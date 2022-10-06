@@ -65,38 +65,41 @@ public class CSP {
     }
 
     public void solverBT() {
-        int i = 1;
+        int i = 0;
         Map<Integer, Integer> varVal = new HashMap<>();
-        List<Integer> domaine = this.varDomaine.get(i - 1).subList(0, this.varDomaine.get(i - 1).size());
+        Map<Integer, List<Integer>> copieVarDomaine = new HashMap<>();
 
         for (int l = 0; l < this.varDomaine.size(); l++) {
             varVal.put(l, -1);
+            copieVarDomaine.put(l, new ArrayList<>(this.varDomaine.get(l)));
         }
 
-        while ((i >= 1) && (i <= this.varDomaine.size())) {
+        while ((i >= 0) && (i < this.varDomaine.size())) {
             boolean ok = false;
-            int k = 0;
-            Integer x = -1;
+            Integer x;
 
-            while (!ok && !domaine.isEmpty()) {
-                x = domaine.remove(k);
+            //System.out.println("Variable " + i);
+
+            while (!ok && !copieVarDomaine.get(i).isEmpty()) {
+                x = copieVarDomaine.get(i).remove(0);
+                //System.out.println("test de la valeur " + x);
                 if (assigneCoherente(i, x, varVal)) {
+                    varVal.put(i, x);
                     ok = true;
                 }
-                k++;
             }
 
             if (!ok) {
+                copieVarDomaine.put(i, new ArrayList<>(this.varDomaine.get(i)));
                 i--;
             }
             else {
-                varVal.put(i-1, x);
                 i++;
-                domaine = this.varDomaine.get(i - 1).subList(0, this.varDomaine.get(i - 1).size());
             }
         }
-        if (i == 0) {
+        if (i < 0) {
             // pas de solution
+            System.out.println("pas de solution");
         }
         else {
             // afficher solution
@@ -106,24 +109,33 @@ public class CSP {
 
     private boolean assigneCoherente(int variable, int valeur, Map<Integer, Integer> varVal) {
         boolean varContrainte = false;
-        boolean assignOk = false;
+        boolean assignOk = true;
 
         // On verifie les contraintes une à une
-        for (int i = 0; ((i < this.contraintes.size()) && !assignOk); i++) {
-            if (this.contraintes.get(i).getSommet2() == variable) {
+        for (Contrainte contrainte : this.contraintes) {
+            if (contrainte.getSommet2() == variable) {
                 // une des contrainte lie la variable à une autre déjà assignée
                 varContrainte = true;
+                boolean var1Ok = false;
 
-                List<int[]> valeursPossible = this.contraintes.get(i).getValeursPossibles();
+                // pour chaque couple de valeurs possible
+                List<int[]> valeursPossible = contrainte.getValeursPossibles();
                 for (int[] couple : valeursPossible) {
-                    if ((couple[0] == varVal.get(this.contraintes.get(i).getSommet1())) && (couple[1] == valeur)) {
-                        assignOk = true;
+                    // si la première variable est affecter d'une valeur possible
+                    if (couple[0] == varVal.get(contrainte.getSommet1())) {
+                        var1Ok = true;
+                        if (couple[1] != valeur) {
+                            assignOk = false;
+                        }
                     }
+                }
+                if (!var1Ok) {
+                    return false;
                 }
             }
         }
 
-        return ((!varContrainte) || assignOk);
+        return varContrainte? assignOk : true;
     }
 
     public void afficherCSP() {
