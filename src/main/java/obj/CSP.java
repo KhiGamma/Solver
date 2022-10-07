@@ -4,17 +4,18 @@ import java.util.*;
 
 public class CSP {
 
-    private Map<Integer, List<Integer>> varDomaine;
-    private List<Contrainte> contraintes;
-    private Random random;
+    protected Map<Integer, List<Integer>> varDomaine;
+    protected List<Contrainte> contraintes;
+    protected Random random;
 
-    public CSP() {
+    public CSP(int nbVar, int nbValeurs) {
         this.varDomaine = new HashMap<>();
         this.contraintes = new ArrayList<>();
         this.random = new Random();
+        initCSP(nbVar, nbValeurs);
     }
 
-    public void initCSP(int nbVar, int nbValeurs, double durete, double densite) {
+    public void initCSP(int nbVar, int nbValeurs) {
 
         // generation des variables + domaines
         for (int i = 0; i < nbVar; i++) {
@@ -26,11 +27,13 @@ public class CSP {
                 this.varDomaine.get(i).add(j);
             }
         }
+    }
 
+    public void genererCSP(double durete, double densite) {
         // generation des contraintes
-        for (int i = 0; i < nbVar - 1; i++) {
-            for (int j = i + 1; j < nbVar; j++) {
-                this.contraintes.add(new Contrainte(i, j, genererValeursPossibles(nbValeurs)));
+        for (int i = 0; i < this.varDomaine.size() - 1; i++) {
+            for (int j = i + 1; j < this.varDomaine.size(); j++) {
+                this.contraintes.add(new Contrainte(i, j, genererValeursPossibles(this.varDomaine.get(0).size())));
             }
         }
 
@@ -83,7 +86,7 @@ public class CSP {
             while (!ok && !copieVarDomaine.get(i).isEmpty()) {
                 x = copieVarDomaine.get(i).remove(0);
                 //System.out.println("test de la valeur " + x);
-                if (assigneCoherente(i, x, varVal)) {
+                if (assignationCoherente(i, x, varVal)) {
                     varVal.put(i, x);
                     ok = true;
                 }
@@ -107,35 +110,30 @@ public class CSP {
         }
     }
 
-    private boolean assigneCoherente(int variable, int valeur, Map<Integer, Integer> varVal) {
-        boolean varContrainte = false;
-        boolean assignOk = true;
+    private boolean assignationCoherente(int variable, int valeur, Map<Integer, Integer> varVal) {
+        boolean coherente;
 
         // On verifie les contraintes une à une
         for (Contrainte contrainte : this.contraintes) {
             if (contrainte.getSommet2() == variable) {
                 // une des contrainte lie la variable à une autre déjà assignée
-                varContrainte = true;
-                boolean var1Ok = false;
+                coherente = false;
 
                 // pour chaque couple de valeurs possible
-                List<int[]> valeursPossible = contrainte.getValeursPossibles();
-                for (int[] couple : valeursPossible) {
+                for (int[] couple : contrainte.getValeursPossibles()) {
                     // si la première variable est affecter d'une valeur possible
-                    if (couple[0] == varVal.get(contrainte.getSommet1())) {
-                        var1Ok = true;
-                        if (couple[1] != valeur) {
-                            assignOk = false;
-                        }
+                    if ((couple[0] == varVal.get(contrainte.getSommet1())) && (couple[1] == valeur)) {
+                        //System.out.println("couple " + couple[0] + " " + couple[1]);
+                        coherente = true;
                     }
                 }
-                if (!var1Ok) {
+                if (!coherente) {
                     return false;
                 }
             }
         }
 
-        return varContrainte? assignOk : true;
+        return true;
     }
 
     public void afficherCSP() {
