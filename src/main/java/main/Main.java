@@ -4,8 +4,8 @@ import obj.CSP;
 
 public class Main {
     public static void main(String[] args) {
-        CSP monCSP = new CSP();
-        monCSP.initCSP(4, 4, 0.2, 0.5);
+        CSP monCSP = new CSP(10, 10);
+        monCSP.genererCSP(0.5, 0.5);
         monCSP.afficherCSP();
         monCSP.solverBT();
     }
