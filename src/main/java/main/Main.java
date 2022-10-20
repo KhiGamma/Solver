@@ -10,9 +10,9 @@ public class Main {
         monCSP.afficherCSP();
         monCSP.solverBT();
 
-        NReines nReines = new NReines(10);
+        NReines nReines = new NReines(4);
         nReines.genererCSP();
         nReines.afficherCSP();
-        nReines.solverBT();
+        nReines.solverBJ();
     }
 }
