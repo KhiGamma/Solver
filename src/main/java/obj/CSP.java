@@ -159,9 +159,6 @@ public class CSP {
                     System.out.println("-".repeat(40));
                     System.out.println("coupable: " + couplableI);
                     System.out.println("-".repeat(40));
-
-                    if (couplableI == 2)
-                        return;
                 }
                 copieVarDomaine.put(i, new ArrayList<>(this.varDomaine.get(i)));
                 i = couplableI;
@@ -210,7 +207,8 @@ public class CSP {
 
         // On verifie si la contrainte du sommet k vers variable donne un couple possible
         for (Contrainte contrainte : this.contraintes) {
-            if ((contrainte.getSommet2() == variable) && (contrainte.getSommet1() <= k)) {
+            if ((contrainte.getSommet2() == variable) && (contrainte.getSommet1() == k)) {
+                System.out.println(contrainte);
                 // une des contrainte lie la variable à une autre déjà assignée
                 coherente = false;
 
@@ -225,8 +223,6 @@ public class CSP {
                 if (!coherente) {
                     return false;
                 }
-            } else if (contrainte.getSommet1() > k) {
-                break;
             }
         }
 
