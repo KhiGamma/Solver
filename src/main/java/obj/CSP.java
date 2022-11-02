@@ -126,14 +126,14 @@ public class CSP {
             boolean consistant;
             int k;
 
-            System.out.println("Variable " + i);
+            //System.out.println("Variable " + i);
 
             while (!ok && !copieVarDomaine.get(i).isEmpty()) {
 
                 x = copieVarDomaine.get(i).remove(0);
                 consistant = true;
                 k = 0;
-                System.out.println("test de la valeur " + x);
+                //System.out.println("test de la valeur " + x);
 
                 while ((k < i) && consistant) {
                     // TODO regler pb couplabe == 2 et i == 2
@@ -149,19 +149,20 @@ public class CSP {
                 }
                 if (consistant) {
                     varVal.put(i, x);
-                    System.out.println(varVal);
                     ok = true;
                 }
             }
 
             if (!ok) {
-                if (copieVarDomaine.get(2).isEmpty()) {
-                    System.out.println("-".repeat(40));
-                    System.out.println("coupable: " + couplableI);
-                    System.out.println("-".repeat(40));
-                }
                 copieVarDomaine.put(i, new ArrayList<>(this.varDomaine.get(i)));
                 i = couplableI;
+
+                // si le domaine de la variable coupable est vide, alors on test celle d'avant
+                if (copieVarDomaine.get(couplableI).isEmpty()) {
+                    couplableI = i - 1;
+                } else {
+                    couplableI = -1;
+                }
             } else {
                 i++;
                 couplableI = -1;
@@ -208,7 +209,6 @@ public class CSP {
         // On verifie si la contrainte du sommet k vers variable donne un couple possible
         for (Contrainte contrainte : this.contraintes) {
             if ((contrainte.getSommet2() == variable) && (contrainte.getSommet1() == k)) {
-                System.out.println(contrainte);
                 // une des contrainte lie la variable à une autre déjà assignée
                 coherente = false;
 
@@ -223,6 +223,8 @@ public class CSP {
                 if (!coherente) {
                     return false;
                 }
+
+                break;
             }
         }
 
