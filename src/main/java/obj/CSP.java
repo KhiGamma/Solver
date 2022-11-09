@@ -180,6 +180,49 @@ public class CSP {
         }
     }
 
+    public void solverFC() {
+        int i = 0;
+        Map<Integer, Integer> varVal = new HashMap<>();
+        Map<Integer, List<Integer>> copieVarDomaine = new HashMap<>();
+
+        for (int l = 0; l < this.varDomaine.size(); l++) {
+            varVal.put(l, -1);
+            copieVarDomaine.put(l, new ArrayList<>(this.varDomaine.get(l)));
+        }
+
+        while ((i >= 0) && (i < this.varDomaine.size())) {
+            boolean ok = false;
+            boolean domaineVide;
+            Integer x;
+
+            //System.out.println("Variable " + i);
+
+            while (!ok && !copieVarDomaine.get(i).isEmpty()) {
+                x = copieVarDomaine.get(i).remove(0);
+                domaineVide = false;
+
+                //System.out.println("test de la valeur " + x);
+                for (int k = i + 1; k < this.varDomaine.size(); k++) {
+
+                }
+            }
+
+            if (!ok) {
+                copieVarDomaine.put(i, new ArrayList<>(this.varDomaine.get(i)));
+                i--;
+            } else {
+                i++;
+            }
+        }
+        if (i < 0) {
+            // pas de solution
+            System.out.println("pas de solution");
+        } else {
+            // afficher solution
+            System.out.println(varVal);
+        }
+    }
+
     private boolean assignationCoherente(int variable, int valeur, Map<Integer, Integer> varVal) {
         boolean coherente;
 
@@ -232,6 +275,18 @@ public class CSP {
         }
 
         return true;
+    }
+
+    private void revise(int varFuture, int varActuelle, Map<Integer, List<Integer>> copieVarDomaine) {
+        for (Contrainte c : this.contraintes) {
+            if ((c.getSommet1() == varActuelle) && (c.getSommet2() == varFuture)) {
+
+            }
+        }
+
+        for (int a : copieVarDomaine.get(varFuture)) {
+
+        }
     }
 
     public void afficherCSP() {
