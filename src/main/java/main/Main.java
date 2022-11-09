@@ -10,9 +10,21 @@ public class Main {
         monCSP.afficherCSP();
         monCSP.solverBJ();*/
 
-        NReines nReines = new NReines(4);
+        NReines nReines = new NReines(23);
         nReines.genererCSP();
         nReines.afficherCSP();
+
+        long startTime = System.nanoTime();
+        nReines.solverBT();
+        long endTime = System.nanoTime();
+
+        System.out.println("BT: " + ((endTime - startTime) / 100000));
+
+
+        startTime = System.nanoTime();
         nReines.solverBJ();
+        endTime = System.nanoTime();
+
+        System.out.println("BJ: " + ((endTime - startTime) / 100000));
     }
 }

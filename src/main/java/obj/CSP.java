@@ -126,7 +126,7 @@ public class CSP {
             boolean consistant;
             int k;
 
-            //System.out.println("Variable " + i);
+            //System.out.println("\tVariable " + i);
 
             while (!ok && !copieVarDomaine.get(i).isEmpty()) {
 
@@ -136,7 +136,7 @@ public class CSP {
                 //System.out.println("test de la valeur " + x);
 
                 while ((k < i) && consistant) {
-                    // TODO regler pb couplabe == 2 et i == 2
+
                     if (k > couplableI) {
                         couplableI = k;
                     }
@@ -154,11 +154,14 @@ public class CSP {
             }
 
             if (!ok) {
-                copieVarDomaine.put(i, new ArrayList<>(this.varDomaine.get(i)));
+                //reset du domaine des variables après le coupable
+                for (int var = couplableI + 1; var <= i; var++) {
+                    copieVarDomaine.put(var, new ArrayList<>(this.varDomaine.get(var)));
+                }
                 i = couplableI;
 
                 // si le domaine de la variable coupable est vide, alors on test celle d'avant
-                if (copieVarDomaine.get(couplableI).isEmpty()) {
+                if ((couplableI != -1) && copieVarDomaine.get(couplableI).isEmpty()) {
                     couplableI = i - 1;
                 } else {
                     couplableI = -1;
