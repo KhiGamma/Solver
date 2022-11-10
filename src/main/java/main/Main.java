@@ -10,21 +10,20 @@ public class Main {
         monCSP.afficherCSP();
         monCSP.solverBJ();*/
 
-        NReines nReines = new NReines(23);
+        NReines nReines = new NReines(26);
         nReines.genererCSP();
-        nReines.afficherCSP();
+        //nReines.afficherCSP();
 
-        long startTime = System.nanoTime();
+        long start = System.nanoTime();
         nReines.solverBT();
-        long endTime = System.nanoTime();
+        long end = System.nanoTime();
+        System.out.println("BT: " + ((end - start) / Math.pow(10, 9)) + "sec");
 
-        System.out.println("BT: " + ((endTime - startTime) / 100000));
+        System.out.println("PROCHAIN");
 
-
-        startTime = System.nanoTime();
+        start = System.nanoTime();
         nReines.solverBJ();
-        endTime = System.nanoTime();
-
-        System.out.println("BJ: " + ((endTime - startTime) / 100000));
+        end = System.nanoTime();
+        System.out.println("BJ: " + ((end - start) / Math.pow(10, 9)) + "sec");
     }
 }
