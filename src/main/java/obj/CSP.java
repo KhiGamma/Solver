@@ -184,10 +184,17 @@ public class CSP {
         int i = 0;
         Map<Integer, Integer> varVal = new HashMap<>();
         Map<Integer, List<Integer>> copieVarDomaine = new HashMap<>();
+        List<Map<Integer, List<Integer>>> historique = new ArrayList<>();
 
         for (int l = 0; l < this.varDomaine.size(); l++) {
             varVal.put(l, -1);
             copieVarDomaine.put(l, new ArrayList<>(this.varDomaine.get(l)));
+
+            historique.add(new HashMap<>());
+
+            for (int ll = l + 1; ll < this.varDomaine.size(); ll++) {
+                historique.get(l).put(ll, new ArrayList<>());
+            }
         }
 
         while ((i >= 0) && (i < this.varDomaine.size())) {
@@ -203,7 +210,17 @@ public class CSP {
 
                 //System.out.println("test de la valeur " + x);
                 for (int k = i + 1; k < this.varDomaine.size(); k++) {
+                    revise(i, k, x, copieVarDomaine, historique.get(i));
 
+                    if (copieVarDomaine.get(k).isEmpty()) {
+                        domaineVide = true;
+                    }
+                }
+                if (domaineVide) {
+                    revert(copieVarDomaine, historique.get(i));
+                } else {
+                    varVal.put(i, x);
+                    ok = true;
                 }
             }
 
@@ -277,15 +294,47 @@ public class CSP {
         return true;
     }
 
-    private void revise(int varFuture, int varActuelle, Map<Integer, List<Integer>> copieVarDomaine) {
+    private void revise(int varActuelle, int varFuture, int x, Map<Integer, List<Integer>> copieVarDomaine, Map<Integer, List<Integer>> historique) {
+        List<int[]> valPossibles = null;
+
+        // on recuèpre la liste des couples possible entre varActuelle et varFuture
         for (Contrainte c : this.contraintes) {
             if ((c.getSommet1() == varActuelle) && (c.getSommet2() == varFuture)) {
-
+                valPossibles = c.getValeursPossibles();
+                break;
             }
         }
 
-        for (int a : copieVarDomaine.get(varFuture)) {
+        List<Integer> copieDomaine = List.copyOf(copieVarDomaine.get(varFuture));
 
+        // on verifie que pour chaque valeur du domaine il existe un couple possible (x, val) dans la contrainte
+        for (Integer val : copieDomaine) {
+            boolean coherent = false;
+
+            for (int[] couple : valPossibles) {
+                if ((couple[0] == x) && (couple[1] == val)) {
+                    coherent = true;
+                    break;
+                }
+            }
+
+            // s'il n'y a pas de couple possible alors on supprime la valeur du domaine
+            // et on enregistre dans l'historique la valeur supprimée
+            if (!coherent) {
+                copieVarDomaine.get(varFuture).remove(val);
+                historique.get(varFuture).add(val);
+            }
+        }
+    }
+
+    private void revert(Map<Integer, List<Integer>> copieVarDomaine, Map<Integer, List<Integer>> historique) {
+        for (Integer var : historique.keySet()) {
+
+            for (Integer val : historique.get(var)) {
+                copieVarDomaine.get(var).add(val);
+            }
+
+            historique.put(var, new ArrayList<>());
         }
     }
 
