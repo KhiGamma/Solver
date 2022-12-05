@@ -8,7 +8,7 @@ public class Main {
         /*CSP monCSP = new CSP(4, 4);
         monCSP.genererCSP(0.2, 0.8);
         monCSP.afficherCSP();
-        monCSP.solverBJ();*/
+        monCSP.solverBJ();
 
         NReines nReines = new NReines(23);
         nReines.genererCSP();
@@ -25,6 +25,12 @@ public class Main {
         nReines.solverBJ();
         endTime = System.nanoTime();
 
-        System.out.println("BJ: " + ((endTime - startTime) / 100000));
+        System.out.println("BJ: " + ((endTime - startTime) / 100000));*/
+
+        CSP monCSP = new CSP(4, 4);
+        // TODO pb densité != 1
+        monCSP.genererCSP(0.2, 0.9);
+        monCSP.afficherCSP();
+        monCSP.solverFC();
     }
 }
