@@ -180,7 +180,7 @@ public class CSP {
         }
     }
 
-    public void solverFC() {
+    public boolean solverFC() {
         int i = 0;
         Map<Integer, Integer> varVal = new HashMap<>();
         Map<Integer, List<Integer>> copieVarDomaine = new HashMap<>();
@@ -234,9 +234,11 @@ public class CSP {
         if (i < 0) {
             // pas de solution
             System.out.println("pas de solution");
+            return false;
         } else {
             // afficher solution
             System.out.println(varVal);
+            return true;
         }
     }
 
@@ -303,6 +305,10 @@ public class CSP {
                 valPossibles = c.getValeursPossibles();
                 break;
             }
+        }
+
+        if (valPossibles == null) {
+            return;
         }
 
         List<Integer> copieDomaine = List.copyOf(copieVarDomaine.get(varFuture));

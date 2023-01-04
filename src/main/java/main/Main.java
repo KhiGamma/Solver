@@ -27,10 +27,17 @@ public class Main {
 
         System.out.println("BJ: " + ((endTime - startTime) / 100000));*/
 
-        CSP monCSP = new CSP(4, 4);
-        // TODO pb densité != 1
-        monCSP.genererCSP(0.2, 0.9);
-        monCSP.afficherCSP();
-        monCSP.solverFC();
+        boolean solutionOk = false;
+        int cpt = 0;
+
+        while (!solutionOk) {
+            cpt++;
+            System.out.println(cpt + "=".repeat(40));
+            CSP monCSP = new CSP(4, 4);
+            // TODO pb densité != 1
+            monCSP.genererCSP(0.2, 0.9);
+            monCSP.afficherCSP();
+            solutionOk = monCSP.solverFC();
+        }
     }
 }
