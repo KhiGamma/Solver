@@ -305,6 +305,10 @@ public class CSP {
             }
         }
 
+        if (valPossibles == null) {
+            return;
+        }
+
         List<Integer> copieDomaine = List.copyOf(copieVarDomaine.get(varFuture));
 
         // on verifie que pour chaque valeur du domaine il existe un couple possible (x, val) dans la contrainte
