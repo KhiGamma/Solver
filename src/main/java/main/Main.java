@@ -5,9 +5,9 @@ import obj.NReines;
 
 public class Main {
     public static void main(String[] args) {
-            /*
-        CSP monCSP = new CSP(100, 10);
-        monCSP.genererCSP(1, 1);
+
+        CSP monCSP = new CSP(10, 5);
+        monCSP.genererCSP(0.6, 0.6);
         //monCSP.afficherCSP();
 
 
@@ -21,7 +21,13 @@ public class Main {
         monCSP.solverBJ();
         end = System.nanoTime();
         System.out.println("BJ: " + ((end - start) / Math.pow(10, 9)) + "sec");
-        */
+
+
+        start = System.nanoTime();
+        monCSP.solverFC();
+        end = System.nanoTime();
+        System.out.println("FC: " + ((end - start) / Math.pow(10, 9)) + "sec");
+
 
         /*
         start = System.nanoTime();
@@ -31,13 +37,15 @@ public class Main {
          */
 
 
-        /*
+/*
         CSP monCSP = new CSP(4, 4);
         // TODO pb densité != 1
-        monCSP.genererCSP(0.2, 0.9);
+        monCSP.genererCSP(0.7, 1);
         monCSP.afficherCSP();
         monCSP.solverFC();
-        */
+
+ */
+
 
 
 
@@ -45,7 +53,8 @@ public class Main {
             //NREINES
             ///////////////////////
 
-            NReines nReines = new NReines(24);
+            /*
+            NReines nReines = new NReines(19);
             nReines.genererCSP();
             //nReines.afficherCSP();
 
@@ -54,7 +63,6 @@ public class Main {
             nReines.solverBT();
             long end = System.nanoTime();
             System.out.println("BT: " + ((end - start) / Math.pow(10, 9)) + "sec");
-
 
             start = System.nanoTime();
             nReines.solverBJ();
@@ -66,5 +74,8 @@ public class Main {
             nReines.solverFC();
             end = System.nanoTime();
             System.out.println("FC: " + ((end - start) / Math.pow(10, 9)) + "sec");
+
+             */
+
     }
 }
